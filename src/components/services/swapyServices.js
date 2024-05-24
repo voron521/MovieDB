@@ -8,6 +8,7 @@ import './swapy-services.css';
 
 export default class SwapyServices extends Component {
   _apiBase = 'https://api.themoviedb.org/3/search/movie?query=return&include_adult=false&language=en-US&page=1';
+  // _apiBase = 'https://api.themoviedb.or';
   _apiBaseImage = 'https://image.tmdb.org/t/p/w500';
 
   options = {
@@ -20,6 +21,7 @@ export default class SwapyServices extends Component {
   };
 
   async getFetch(url) {
+    console.log('utr внутри swapy getFetch:', url);
     const res = await fetch(url, this.options);
     if (!res.ok) {
       throw new Error(`запрос не получился по url:${url} он завершился со статусом: ${res.status}`);
@@ -34,6 +36,27 @@ export default class SwapyServices extends Component {
 
   getPictureMoviesUrl(url) {
     const res = `${this._apiBaseImage}${url}`;
+
     return res;
   }
+  // async loadinImg(url) {
+  //   try {
+  //     const res = await this.getFetch(url, 1);
+  //     console.log("краереар", res)
+  //     if (!res.ok) {
+  //       throw new Error(`Запрос не получился по url: ${url}. Он завершился со статусом: ${res.status}`);
+  //     }
+
+  //     this.setState({ imageUrl, loadingImg: false });
+  //   } catch (error) {
+  //     console.error('Ошибка загрузки изображения:', error);
+  //     this.setState({ loadingImg: false });
+  //   }
+  // }
 }
+
+// let a = new SwapyServices
+// a.loadinImg("https://image.tmdb.org/t/p/w500/dJ52jV7HlJ9hB8kdBOnj01DllBA.jpg")
+// .then((res) => {
+//   console.log("результат", res)
+// })

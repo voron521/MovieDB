@@ -7,29 +7,3 @@
     
     
 }
-.info-wrapper{
-    display: flex;
-    flex-direction:column;
-    justify-content: flex-start;
-    margin-left: 20px;
-    margin-right: 20px;
-    max-height: 232px;
-    overflow: hidden;
-}
-.info-wrapper .ant-typography {
-    margin-top: 0;
-}
-
-.description-p {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.date-p {
-    color: #827E7E;
-}
-    
-    
