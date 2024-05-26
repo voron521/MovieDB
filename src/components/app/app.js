@@ -1,11 +1,12 @@
 import { Component } from 'react';
-
 import './app.css';
 import Loader from '../loader';
 import SwapyServices from '../services';
 import MovieCard from '../movie-card';
 import Onerror from '../Onerror';
 import Isonline from '../Isonline';
+import Header from '../header';
+import { Pagination } from 'antd';
 
 export default class App extends Component {
   swapiService = new SwapyServices();
@@ -16,6 +17,9 @@ export default class App extends Component {
       movies: [],
       loadMovies: true,
       error: false,
+      searchName: null,
+      currentPage: 1,
+      totalResults: 0,
     };
   }
 
@@ -23,18 +27,31 @@ export default class App extends Component {
     this.loadMovies();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchName !== this.state.searchName || prevState.currentPage !== this.state.currentPage) {
+      this.loadMovies(this.state.searchName, this.state.currentPage);
+    }
+  }
+
+  TakeSeachName = (name) => {
+    this.setState({ searchName: name, currentPage: 1 });
+  }
+
   loadErr() {
     this.setState({ error: true });
   }
 
-  async loadMovies() {
+  async loadMovies(name, page = 1) {
+    if (!name) {
+      return;
+    }
     try {
-      const movies = await this.swapiService.getMovies();
-      setTimeout(() => {
-        this.setState({ loadMovies: false, movies: movies.results }, () => {
-          this.makeCardArr();
-        });
-      }, 1000);
+      const movies = await this.swapiService.getMovies(name, page);
+      this.setState({ 
+        loadMovies: false, 
+        movies: movies.results, 
+        totalResults: movies.total_results 
+      });
     } catch (err) {
       this.loadErr();
     }
@@ -42,7 +59,6 @@ export default class App extends Component {
 
   makeCardArr() {
     const { movies } = this.state;
-    console.log(movies);
     const dataCards = movies.map((mov) => ({
       id: mov.id,
       title: mov.title,
@@ -53,10 +69,13 @@ export default class App extends Component {
     return dataCards;
   }
 
+  onChangePage = (page) => {
+    this.setState({ currentPage: page });
+  }
+
   render() {
-    console.log('местный иснолайн', Isonline.state);
+    const { loadMovies, error, currentPage, totalResults } = this.state;
     const dataCards = this.makeCardArr();
-    const { loadMovies, error } = this.state;
     let classSection = 'main-section';
     let mivesArr;
 
@@ -64,6 +83,7 @@ export default class App extends Component {
       mivesArr = dataCards.map((movie) => {
         const fullImagePath = swipe(movie.posterPath);
         return (
+          
           <MovieCard
             key={movie.id}
             title={movie.title}
@@ -88,12 +108,33 @@ export default class App extends Component {
     if (error) {
       mivesArr = <Onerror />;
     }
+    if (this.state.searchName === null) {
+      mivesArr = <div className='info-search-section'>Для отображения фильмов введите название фильма в строку поиска</div>
+    }
+
+    if (!(this.state.loadMovies) && this.state.movies.length === 0) {
+      mivesArr = <div className='info-search-section'>По вашему запросу фильмов не найдено</div>
+    }
 
     return (
-      <section className={classSection}>
-        {mivesArr}
-        {<Isonline className="isonlineApp" />}
-      </section>
+      <div className='mainWpapper'>
+        <Header TakeSeachName={this.TakeSeachName} />
+        <section className={classSection}>
+        
+          <div className='movies-wrapper'>
+            {mivesArr}
+          </div>
+          
+          <Isonline className="isonlineApp" />
+        </section>
+        <Pagination 
+            current={currentPage} 
+            onChange={this.onChangePage} 
+            total={totalResults} 
+          />
+        
+      </div>
+      
     );
   }
 }

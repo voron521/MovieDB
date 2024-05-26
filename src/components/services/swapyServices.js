@@ -7,7 +7,10 @@ import './swapy-services.css';
 // import Footer from '../Footer';
 
 export default class SwapyServices extends Component {
-  _apiBase = 'https://api.themoviedb.org/3/search/movie?query=return&include_adult=false&language=en-US&page=1';
+  _apiBase = 'https://api.themoviedb.org/3/search/movie?query=';
+  // _apiOptions = '&include_adult=false&language=en-US&page=1'
+  _apiOptions = '&include_adult=false&language=en-US&page='
+  
   // _apiBase = 'https://api.themoviedb.or';
   _apiBaseImage = 'https://image.tmdb.org/t/p/w500';
 
@@ -20,17 +23,20 @@ export default class SwapyServices extends Component {
     },
   };
 
-  async getFetch(url) {
-    console.log('utr внутри swapy getFetch:', url);
-    const res = await fetch(url, this.options);
+  async getFetch(url, option, serachName) {
+    let completeUrl = `${url}${serachName}${option}`
+    console.log('utr внутри swapy getFetch:', completeUrl);
+    const res = await fetch(completeUrl, this.options);
     if (!res.ok) {
-      throw new Error(`запрос не получился по url:${url} он завершился со статусом: ${res.status}`);
+      throw new Error(`запрос не получился по url:${completeUrl} он завершился со статусом: ${res.status}`);
     }
     return res.json();
   }
 
-  async getMovies() {
-    const res = await this.getFetch(this._apiBase);
+  async getMovies(serachName, page) {
+    let optionsWithPage = `${this._apiOptions}${page}`
+    
+    const res = await this.getFetch(this._apiBase, optionsWithPage, serachName);
     return res;
   }
 
@@ -55,8 +61,3 @@ export default class SwapyServices extends Component {
   // }
 }
 
-// let a = new SwapyServices
-// a.loadinImg("https://image.tmdb.org/t/p/w500/dJ52jV7HlJ9hB8kdBOnj01DllBA.jpg")
-// .then((res) => {
-//   console.log("результат", res)
-// })

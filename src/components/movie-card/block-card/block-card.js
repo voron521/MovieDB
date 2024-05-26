@@ -36,6 +36,7 @@ export default class BlockCards extends Component {
             fallback={placeholderImage}
             alt="обложка фильма"
             onLoad={this.handleImageLoad}
+            preview={false}
           />
         </div>
         <div className="info-wrapper">

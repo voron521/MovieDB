@@ -17,13 +17,14 @@ export default class MovieCard extends Component {
     loadInfo: this.props.stateLoad,
   };
 
-  async getImgUrl(url) {
-    this.swapiService.loadinImg(url);
-    console.log('resGetImg', this.swapiService.state.imageUrl);
-  }
+  // async getImgUrl(url) {
+  //   this.swapiService.getPictureMoviesUrl(url)
+    
+    
+  // }
   componentDidMount() {
     const { posterPath } = this.props;
-    this.getImgUrl(posterPath);
+    // this.getImgUrl(posterPath);
   }
   componentDidUpdate(prevProps) {
     if (this.props.stateLoad !== prevProps.stateLoad) {
