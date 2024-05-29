@@ -36,14 +36,18 @@
 .info-wrapper{
     display: flex;
     flex-direction:column;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin-left: 20px;
     margin-right: 20px;
-    max-height: 232px;
+    align-items: self-start;
+    /* max-height: 232px; */
+    
     overflow: hidden;
 }
 .info-wrapper .ant-typography {
     margin-top: 0;
+    margin-bottom: 7px;
+  
 }
 
 .description-p {
@@ -67,4 +71,49 @@
 } 
 .ant-image-hidden {
   display: none;
+}
+.header-info{
+  
+  overflow: hidden;
+  margin-bottom: 15px;
+  width: 100%
+}
+.rating{
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.title-wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.film-rate{
+  min-width: 30px; 
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  margin-left: 4px;
+}
+
+.movieGanre{
+  display: flex;
+  flex-wrap: wrap;
+}
+.ganreItem{
+  min-width: 46px;
+  min-height: 20px;
+  border: 1px solid #D9D9D9;
+  border-radius: 2px;
+  margin-right: 8px;
+  margin-top: 4px;
+  padding: 2px 4px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FAFAFA;
 }

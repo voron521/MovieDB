@@ -7,12 +7,11 @@ import './swapy-services.css';
 // import Footer from '../Footer';
 
 export default class SwapyServices extends Component {
+  _apiGuestSession = 'https://api.themoviedb.org/3/authentication/guest_session/new';
   _apiBase = 'https://api.themoviedb.org/3/search/movie?query=';
-  // _apiOptions = '&include_adult=false&language=en-US&page=1'
   _apiOptions = '&include_adult=false&language=en-US&page='
-  
-  // _apiBase = 'https://api.themoviedb.or';
   _apiBaseImage = 'https://image.tmdb.org/t/p/w500';
+  _apiMovieDetails = 'https://api.themoviedb.org/3/movie/'
 
   options = {
     method: 'GET',
@@ -23,7 +22,7 @@ export default class SwapyServices extends Component {
     },
   };
 
-  async getFetch(url, option, serachName) {
+  async getFetch(url, option = '', serachName = '') {
     let completeUrl = `${url}${serachName}${option}`
     console.log('utr внутри swapy getFetch:', completeUrl);
     const res = await fetch(completeUrl, this.options);
@@ -40,24 +39,25 @@ export default class SwapyServices extends Component {
     return res;
   }
 
+  async guestSession() {
+    const res = await this.getFetch(this._apiGuestSession);
+    return res;
+
+  }
+
+  async getGenreMovie(idFilm) {
+    const res = await this.getFetch(this._apiMovieDetails, idFilm);
+    const resGenres = res.genres.map((movie) => {
+      return movie.name
+    })
+    return resGenres;
+  }
+
   getPictureMoviesUrl(url) {
     const res = `${this._apiBaseImage}${url}`;
 
     return res;
   }
-  // async loadinImg(url) {
-  //   try {
-  //     const res = await this.getFetch(url, 1);
-  //     console.log("краереар", res)
-  //     if (!res.ok) {
-  //       throw new Error(`Запрос не получился по url: ${url}. Он завершился со статусом: ${res.status}`);
-  //     }
 
-  //     this.setState({ imageUrl, loadingImg: false });
-  //   } catch (error) {
-  //     console.error('Ошибка загрузки изображения:', error);
-  //     this.setState({ loadingImg: false });
-  //   }
-  // }
 }
 

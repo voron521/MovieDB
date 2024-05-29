@@ -21,6 +21,7 @@ export default class App extends Component {
       currentPage: 1,
       totalResults: 0,
     };
+    this.getGanreMovie = this.getGanreMovie.bind(this);
   }
 
   componentDidMount() {
@@ -47,9 +48,18 @@ export default class App extends Component {
     }
     try {
       const movies = await this.swapiService.getMovies(name, page);
+      const movieDict = movies.results.reduce((akk, iter) => {
+        this.getGanreMovie(iter.id)
+        akk[iter.id] = iter
+        return akk
+      }, {})
+
+      this.swapiService.guestSession()
+        .then((res) => {
+        })
       this.setState({ 
         loadMovies: false, 
-        movies: movies.results, 
+        movies: movieDict,
         totalResults: movies.total_results 
       });
     } catch (err) {
@@ -59,13 +69,31 @@ export default class App extends Component {
 
   makeCardArr() {
     const { movies } = this.state;
-    const dataCards = movies.map((mov) => ({
-      id: mov.id,
-      title: mov.title,
-      overview: mov.overview,
-      posterPath: mov.poster_path,
-      releaseDate: mov.release_date,
-    }));
+    console.log("movies makeCardArr:", movies)
+    let dataCards = []
+    for (let key in movies) {
+      let mov = movies[key]
+      dataCards.push(
+        {
+            id: mov.id,
+            title: mov.title,
+            overview: mov.overview,
+            posterPath: mov.poster_path,
+            releaseDate: mov.release_date,
+            ratingMovie: mov.vote_average,
+            genreMovie: mov.genreMovie,
+          }
+
+      )
+    }
+    // const dataCards = movies.map((mov) => ({
+    //   id: mov.id,
+    //   title: mov.title,
+    //   overview: mov.overview,
+    //   posterPath: mov.poster_path,
+    //   releaseDate: mov.release_date,
+    //   ratingMovie: mov.vote_average,
+    // }));
     return dataCards;
   }
 
@@ -73,9 +101,24 @@ export default class App extends Component {
     this.setState({ currentPage: page });
   }
 
+  async getGanreMovie(id) {
+    const genre = await this.swapiService.getGenreMovie(id)
+    const newMovies = { ...this.state.movies };
+    newMovies[id].genreMovie = genre;
+    this.setState({ movies: newMovies });
+
+
+    
+    
+  
+  }
+
+
   render() {
+    console.log(this.state.movies)
     const { loadMovies, error, currentPage, totalResults } = this.state;
     const dataCards = this.makeCardArr();
+    console.log("dataCards в рендере:", dataCards)
     let classSection = 'main-section';
     let mivesArr;
 
@@ -85,13 +128,19 @@ export default class App extends Component {
         return (
           
           <MovieCard
-            key={movie.id}
+            movieId={movie.id}
             title={movie.title}
             overview={movie.overview}
             posterPath={fullImagePath}
             releaseDate={movie.releaseDate}
             backdropPath={movie.backdropPath}
             loadStatus={loadMovies}
+            ratingMovie={movie.ratingMovie}
+            genreMovie={movie.genreMovie}
+            
+
+            
+            
           />
         );
       });
@@ -102,7 +151,8 @@ export default class App extends Component {
       : ((mivesArr = completeRend(
           loadMovies,
           dataCards,
-          this.swapiService.getPictureMoviesUrl.bind(this.swapiService)
+          this.swapiService.getPictureMoviesUrl.bind(this.swapiService),
+          this.getGanreMovie
         )),
         (classSection = 'main-section'));
     if (error) {

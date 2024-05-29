@@ -17,14 +17,10 @@ export default class MovieCard extends Component {
     loadInfo: this.props.stateLoad,
   };
 
-  // async getImgUrl(url) {
-  //   this.swapiService.getPictureMoviesUrl(url)
-    
-    
-  // }
+
   componentDidMount() {
     const { posterPath } = this.props;
-    // this.getImgUrl(posterPath);
+
   }
   componentDidUpdate(prevProps) {
     if (this.props.stateLoad !== prevProps.stateLoad) {
@@ -33,8 +29,10 @@ export default class MovieCard extends Component {
   }
 
   render() {
-    const { id, title, overview, posterPath, releaseDate, loadStatus } = this.props;
+    console.log("пропсы мои кард", this.props)
+    const { movieId, title, overview, posterPath, releaseDate, loadStatus, ratingMovie, genreMovie } = this.props;
     console.log('статус загрузки', loadStatus);
+    
 
     const placeholderImage = 'https://via.placeholder.com/183x281.png?text=No+Image';
     let formattedDate = '';
@@ -45,7 +43,7 @@ export default class MovieCard extends Component {
       }
     }
     return (
-      <article className="main-articl" key={id}>
+      <article className="main-articl" key={movieId}>
         {loadStatus ? (
           <Loader />
         ) : (
@@ -55,6 +53,9 @@ export default class MovieCard extends Component {
             posterPath={posterPath}
             formattedDate={formattedDate}
             placeholderImage={placeholderImage}
+            filmId={movieId}
+            ratingMovie={ratingMovie}
+            genreMovie={genreMovie}
           />
         )}
       </article>
