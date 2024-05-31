@@ -1,5 +1,5 @@
 .main-articl{
-    width: 454px;
+    max-width: 454px;
     height: 281px;
     display: flex;
     margin-top: 19px;
