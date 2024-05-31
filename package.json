@@ -2,7 +2,6 @@
   "name": "stardb",
   "version": "0.1.0",
   "private": true,
-  // "homepage": "https://voron521.github.io/MovieDB",
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@testing-library/jest-dom": "^5.17.0",
