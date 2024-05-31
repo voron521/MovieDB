@@ -1,5 +1,4 @@
 import { Component } from 'react';
-
 import './Isonline.css';
 import { Alert, Space } from 'antd';
 
@@ -11,10 +10,6 @@ export default class Isonline extends Component {
     };
   }
 
-  updateNetworkStatus = () => {
-    this.setState({ isOnline: navigator.onLine });
-  };
-
   componentDidMount() {
     window.addEventListener('online', this.updateNetworkStatus);
     window.addEventListener('offline', this.updateNetworkStatus);
@@ -24,6 +19,10 @@ export default class Isonline extends Component {
     window.removeEventListener('online', this.updateNetworkStatus);
     window.removeEventListener('offline', this.updateNetworkStatus);
   }
+
+  updateNetworkStatus = () => {
+    this.setState({ isOnline: navigator.onLine });
+  };
 
   render() {
     const { isOnline } = this.state;
