@@ -32,7 +32,7 @@ export default class Isonline extends Component {
           <Space direction="vertical" style={{ width: '100%', marginTop: '40%' }}>
             <Alert
               message="Что-то пошло не так"
-              description="У вас нет подключение к интернету"
+              description="У вас нет подключения к интернету"
               type="warning"
               showIcon
               closable
